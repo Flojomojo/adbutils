@@ -109,9 +109,27 @@ adb.wait_for("127.0.0.1:5555", state="disconnect") # wait device disconnect
 ```
 
 ## adb forward and adb reverse
-Same as `adb forward --list` and `adb reverse --list`
+Same as:
+* `adb forward <local> <remote>`
+* `adb forward --remove <local>`
+* `adb forward --remove-all`
+* `adb forward --list` 
+* `adb reverse --list`
 
 ```python
+# forward local address to remote address
+d.forward("tcp:9999", "localabstract:scrcpy")
+
+# forward remote address to local random port
+port = d.forward_port("localabstract:scrcpy")
+print(port)  # 54622 (random)
+
+# remove forwarded connection
+d.forward_remove("tcp:9999")  # use local address
+
+# remove all forwarded connections tied to specific device
+d.forward_remove_all()
+
 # list all forwards
 for item in adb.forward_list():
     print(item.serial, item.local, item.remote)

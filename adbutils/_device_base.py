@@ -481,11 +481,13 @@ class BaseDevice:
             c.check_okay() # check reponse
 
     def reverse_remove_all(self) -> None:
-        """Remove all forwarded network connections."""
+        """Remove all reverse network connections."""
         self.open_transport("killreverse-all").close()
 
     def reverse_remove(self, remote: str):
         """
+        Remove existing reverse remote connection.
+
         Args:
             serial (str): device serial
             remote (str):

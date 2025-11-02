@@ -480,6 +480,28 @@ class BaseDevice:
             c.check_okay() # this OKAY means message was received
             c.check_okay() # check reponse
 
+    def reverse_remove_all(self) -> None:
+        """Remove all forwarded network connections."""
+        self.open_transport("killreverse-all").close()
+
+    def reverse_remove(self, remote: str):
+        """
+        Args:
+            serial (str): device serial
+            remote (str):
+                - tcp:<port>
+                - localabstract:<unix domain socket name>
+                - localreserved:<unix domain socket name>
+                - localfilesystem:<unix domain socket name>
+
+        Raises:
+            AdbError
+        """
+        with self.open_transport() as c:
+            c.send_command(f"reverse:killforward:{remote}")
+            c.check_okay()
+            c.check_okay()
+
     def reverse_list(self) -> List[ReverseItem]:
         with self.open_transport() as c:
             c.send_command("reverse:list-forward")

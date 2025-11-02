@@ -482,7 +482,10 @@ class BaseDevice:
 
     def reverse_remove_all(self) -> None:
         """Remove all reverse network connections."""
-        self.open_transport("killreverse-all").close()
+        with self.open_transport() as c:
+            c.send_command("reverse:killforward-all")
+            c.check_okay()
+            c.check_okay()
 
     def reverse_remove(self, remote: str):
         """
